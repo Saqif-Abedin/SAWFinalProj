@@ -11,3 +11,6 @@ Updated README.md with team name, roster, project description (launch codes stil
 Created site map and component map for design doc 
 Added design doc
 Added devlog
+
+alvinW -- 2021-05-28 09:26
+Set up login, register, and logout functions
