@@ -6,7 +6,7 @@ import time
 import sqlite3
 import uuid
 
-
+#test comment
 APP_NAME = "TeamSAW Personal Expense Tracker"
 app = Flask(APP_NAME, template_folder="app/templates", static_folder="app/static")
 bcrypt = Bcrypt(app)
