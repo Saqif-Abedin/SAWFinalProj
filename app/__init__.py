@@ -13,6 +13,9 @@ bcrypt = Bcrypt(app)
 app.secret_key = os.urandom(32)
 DB_FILE = "app/team_saw.db"
 
+@app.route("/")
+def renderlogin():
+    return render_template(login.html)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -83,6 +86,7 @@ def logout():
     session.pop("user_id")
     session.pop("username")
     return redirect(url_for("index"))
+
 
 
 
