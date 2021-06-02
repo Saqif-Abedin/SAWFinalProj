@@ -14,3 +14,6 @@ Added devlog
 
 alvinW -- 2021-05-28 09:26
 Set up login, register, and logout functions
+
+jonathanL -- 2021-06-01 09:00
+Set up login and signup templates
