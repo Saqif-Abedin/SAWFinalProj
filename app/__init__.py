@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, session, url_for, redirect, a
 from flask_bcrypt import Bcrypt
 import bcrypt
 import os
-import time
+from datetime import datetime
 import sqlite3
 import uuid
 
@@ -12,6 +12,10 @@ app = Flask(APP_NAME, template_folder="app/templates", static_folder="app/static
 bcrypt = Bcrypt(app)
 app.secret_key = os.urandom(32)
 DB_FILE = "app/team_saw.db"
+db = sqlite3.connect(DB_FILE, check_same_thread = False)
+c = db.cursor()
+c.execute('CREATE TABLE IF NOT EXISTS users(ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, user_id TEXT NOT NULL UNIQUE, username TEXT NOT NULL UNIQUE, password	TEXT NOT NULL, budget TEXT)')
+c.execute('CREATE TABLE IF NOT EXISTS expenses(ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, user_id TEXT NOT NULL, expense_name TEXT NOT NULL, desc TEXT NOT NULL, amount DOUBLE NOT NULL, timestamp TEXT)')
 
 @app.route("/")
 def renderlogin():
@@ -23,12 +27,10 @@ def register():
     if request.method == "GET":
         return render_template("register.html")
 
-    if not request.form.get("username") or not request.form.get("password") or not request.form.get("confirm password"):
-        return render_template("register.html", warning="Please fill out all fields.")
+    if not request.form.get("username") or not request.form.get("password"):
+        return render_template("error.html", warning="Please fill out all fields.")
     elif len(request.form.get("password")) < 4:
-        return render_template("register.html", warning="Password must be at least 4 characters long.")
-    elif request.form.get("password") != request.form.get("confirm password"):
-        return render_template("register.html", warning="Passwords do not match.")
+        return render_template("error.html", warning="Password must be at least 4 characters long.")
 
     db = sqlite3.connect(DB_FILE)
     cursor = db.cursor()
@@ -36,22 +38,28 @@ def register():
     user = cursor.fetchone()
     if user:
         db.close()
-        return render_template("register.html", warning="Username is already taken.")
+        return render_template("error.html", warning="Username is already taken.")
 
     password_hash = bcrypt.generate_password_hash(request.form.get("password"))
     user_id = str(uuid.uuid4())
-    if request.form.get("description"):
-        cursor.execute("insert into users (user_id, username, password, description) values (?, ?, ?, ?)", (user_id, request.form.get("username"), password_hash, request.form.get("description")))
+    if request.form.get("budget"):
+        cursor.execute("insert into users (user_id, username, password, budget) values (?, ?, ?, ?)", (user_id, request.form.get("username"), password_hash, request.form.get("budget")))
     else:
-        cursor.execute("insert into users (user_id, username, password) values (?, ?, ?)", (user_id, request.form.get("username"), password_hash))
+        cursor.execute("insert into users (user_id, username, password, budget) values (?, ?, ?,?)", (user_id, request.form.get("username"), password_hash, 0))
     cursor.execute("select * from users where user_id = ?", (user_id,))
     user = cursor.fetchone()
     db.commit()
+    c.execute('select expense_name, desc, amount, timestamp from expenses where user_id=?', (user_id,)) 
+    expenses = c.fetchall()
+    c.execute('select budget from users where user_id=?', (user_id,))
+    budget = float(c.fetchone()[0])
     db.close()
 
     session["user_id"] = user[1]
     session["username"] = user[2]
-    return redirect(url_for("index"))
+    session['budget'] = budget
+    session['expenses'] = expenses
+    return render_template("main.html", table = expenses, budget = budget)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -63,7 +71,7 @@ def login():
         return render_template("login.html")
 
     if not request.form.get("username") or not request.form.get("password"):
-        return render_template("login.html", warning="Please fill out all fields.")
+        return render_template("error.html", warning="Please fill out all fields.")
 
     db = sqlite3.connect(DB_FILE)
     cursor = db.cursor()
@@ -71,11 +79,18 @@ def login():
     user = cursor.fetchone()
     db.close()
     if not user or not bcrypt.check_password_hash(user[3], request.form.get("password")):
-        return render_template("login.html", warning="Incorrect username or password.")
+        return render_template("error.html", warning="Incorrect username or password.")
 
     session["user_id"] = user[1]
     session["username"] = user[2]
-    return redirect(url_for("index"))
+    user_id = session["user_id"]
+    c.execute('select expense_name, desc, amount, timestamp from expenses where user_id=?', (user_id,)) 
+    expenses = c.fetchall()
+    c.execute('select budget from users where user_id=?', (user_id,))
+    budget = float(c.fetchone()[0])
+    session['budget'] = budget
+    session['expenses'] = expenses
+    return render_template("main.html", table = expenses, budget = budget)
 
 
 @app.route("/logout")
@@ -86,6 +101,31 @@ def logout():
     session.pop("user_id")
     session.pop("username")
     return redirect(url_for("index"))
+
+@app.route("/addentry")
+def addentry():
+    user_id = session["user_id"]
+    expense_name = request.args.get("expense_name")
+    expense_desc = request.args.get("expense_desc")
+    expense_amount = float(request.args.get("expense_amount"))
+    today = datetime.today().strftime('%Y-%m-%d-%H:%M')
+    c.execute('insert into expenses(user_id, expense_name, desc, amount, timestamp) values(?,?,?,?,?)', (user_id, expense_name, expense_desc, '${:,.2f}'.format(expense_amount), today))
+    db.commit()
+    c.execute('select expense_name, desc, amount, timestamp from expenses where user_id=?', (user_id,)) 
+    expenses = c.fetchall()
+    session['expenses'] = expenses
+    budget = float(session["budget"]) - expense_amount
+    c.execute('update users set budget=?', (budget,))
+    db.commit()
+    return render_template("main.html", table = expenses, budget = budget)
+
+@app.route("/setbudget")
+def setbudget():
+    user_id = session["user_id"]
+    budget = '${:,.2f}'.format(float(request.args.get("budget")))
+    c.execute('update users set budget=?', (budget,))
+    db.commit()
+    return render_template('main.html', budget = budget)
 
 
 
