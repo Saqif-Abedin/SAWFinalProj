@@ -19,7 +19,10 @@ c.execute('CREATE TABLE IF NOT EXISTS expenses(ID INTEGER NOT NULL PRIMARY KEY A
 
 @app.route("/")
 def renderlogin():
-    return render_template("login.html")
+    if session.get('user_id'):
+        return render_template("main.html", table = session['expenses'], budget = session['budget'])
+    else:
+        return render_template("login.html")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -67,7 +70,7 @@ def login():
 
     if request.method == "GET":
         if session.get("user_id"):
-            return redirect(url_for("index"))
+            return render_template("main.html", table = session['expenses'], budget = session['budget'])
         return render_template("login.html")
 
     if not request.form.get("username") or not request.form.get("password"):
@@ -100,7 +103,7 @@ def logout():
 
     session.pop("user_id")
     session.pop("username")
-    return redirect(url_for("index"))
+    return render_template("login.html")
 
 @app.route("/addentry")
 def addentry():

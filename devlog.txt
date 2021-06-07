@@ -53,3 +53,6 @@ alvinW -- 2021-06-07 09:55
 fixed issue where if expense is more than budget, current budget is displayed as 0. now it is displayed as the negative value
 fixed issue where setting a new budget did not erase previous entries
 various small changes
+Current TODO:
+	-Warn user when expense takes them over budget (in progress)
+	-Aesthetic changes (CSS, Bootstrap, Templating)
