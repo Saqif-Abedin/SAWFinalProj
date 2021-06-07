@@ -45,3 +45,6 @@ Current TODO:
 jonathanL -- 2021-06-07 09:24
 Reordered table columns to be more readable
 Added padding to elements
+
+saqifA -- 2021-06-06 9:51
+updated README.md and updated Launch codes; ensured that they work properly
