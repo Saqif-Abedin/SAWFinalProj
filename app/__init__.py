@@ -114,7 +114,8 @@ def addentry():
     c.execute('select expense_name, desc, amount, timestamp from expenses where user_id=?', (user_id,)) 
     expenses = c.fetchall()
     session['expenses'] = expenses
-    budget = float(session["budget"]) - expense_amount
+    budget = session["budget"] - expense_amount
+    session["budget"] = budget
     c.execute('update users set budget=?', (budget,))
     db.commit()
     return render_template("main.html", table = expenses, budget = budget)
