@@ -11,3 +11,6 @@ Our website allows users to track their spending and savings and display it in h
 
 ## Launch codes:
 1. Clone this repository: `git clone https://github.com/Saqif-Abedin/TeamSAWFinalProj.git` or `git clone git@github.com:Saqif-Abedin/TeamSAWFinalProj.git`
+2. Go to the Repository: `cd TeamSAWFinalProj`
+3. Install the required modules: `pip install -r requirements.txt`
+4. Run the app: `flask run`
