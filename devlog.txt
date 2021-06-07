@@ -48,3 +48,8 @@ Added padding to elements
 
 saqifA -- 2021-06-06 9:51
 updated README.md and updated Launch codes; ensured that they work properly
+
+alvinW -- 2021-06-07 09:55
+fixed issue where if expense is more than budget, current budget is displayed as 0. now it is displayed as the negative value
+fixed issue where setting a new budget did not erase previous entries
+various small changes

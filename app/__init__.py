@@ -118,15 +118,17 @@ def addentry():
     session["budget"] = budget
     c.execute('update users set budget=?', (budget,))
     db.commit()
-    return render_template("main.html", table = expenses, budget = budget)
+    return render_template("main.html", table = expenses, budget = '${:,.2f}'.format(budget))
 
 @app.route("/setbudget")
 def setbudget():
     user_id = session["user_id"]
-    budget = '${:,.2f}'.format(float(request.args.get("budget")))
-    c.execute('update users set budget=?', (budget,))
+    budget = float(request.args.get("budget"))
+    c.execute('update users set budget=? where user_id =? ', (budget, user_id))
+    session["budget"] = budget
+    c.execute('delete from expenses where user_id=?', (user_id,))
     db.commit()
-    return render_template('main.html', budget = budget)
+    return render_template('main.html', budget = '${:,.2f}'.format(budget))
 
 
 
