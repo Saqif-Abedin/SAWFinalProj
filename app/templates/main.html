@@ -5,29 +5,29 @@
             integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
     </head>
 	<body>
-	<h1> Current Budget: {{budget}} </h1>
-	<form action = "/setbudget">
+	<h1 class="m-3"> Current Budget: {{budget}} </h1>
+	<form action = "/setbudget" class="m-3">
 		Set a new weekly budget? <input type = "text" name = "budget">
 		<button id = "setbudget">Set Budget!</button>
 		</form>
 	<br>
-	<form action = "/addentry"> 
-	Expense Name: <input type = "text" name = "expense_name" required>
-	Description: <input type = "text" name = "expense_desc" required>
-	Amount: <input type = "number" name = "expense_amount" required min = "0">
+	<form action = "/addentry" class="m-3"> 
+		Expense Name: <input type = "text" name = "expense_name" required>
+		Description: <input type = "text" name = "expense_desc" required>
+		Amount: <input type = "number" name = "expense_amount" required min = "0">
 	<button id = "addentry">Add Entry </button> 
 	</form>
 	{% for entry in table %}
-		<table>
+		<table class="m-3">
 			<tr>
-			<th>Expense Name:</th>
-				<td class = "c2">{{entry[0]}}</td>
-			<th>Description:</th>
-				<td class = "c2">{{entry[1]}}</td>
-			<th>Amount:</th>
-				<td class = "c2">{{entry[2]}}</td>
-			<th>Timestamp:</th>
-				<td class = "c2">{{entry[3]}}</td>
+				<th>Timestamp:</th>
+					<td class = "c2">{{entry[3]}}</td>
+				<th>Amount:</th>
+					<td class = "c2">{{entry[2]}}</td>
+				<th>Expense Name:</th>
+					<td class = "c2">{{entry[0]}}</td>
+				<th>Description:</th>
+					<td class = "c2">{{entry[1]}}</td>
 			</tr>
 		</table>
 	{% endfor %}

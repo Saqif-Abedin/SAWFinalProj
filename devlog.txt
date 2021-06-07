@@ -40,3 +40,8 @@ Current TODO:
 	-Aesthetic changes (CSS, Bootstrap, Templating)
 	-Add logout button on main.html
 	-Various other features?
+
+
+jonathanL -- 2021-06-07 09:24
+Reordered table columns to be more readable
+Added padding to elements
