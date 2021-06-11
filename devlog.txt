@@ -63,3 +63,9 @@ added login redirects to everything
 consistently styled all buttons and other elements
 added header
 styled error page as well
+
+saqifA -- 2021-06-11 03:20
+fixed table formatting for data entries
+Embedded stock charts from tradingview.com
+Moved home button on stockviewer.html
+Formatted budget warnings
