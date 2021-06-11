@@ -5,17 +5,20 @@
             integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
     </head>
 	<body>
-	<h1 class="m-3"> Current Budget: {{budget}} </h1>
+	<h1 class="m-3"> Current Budget: ${{'%0.2f'| format(budget|float)}} </h1>
+    {% if budget < 0 %}
+        <h3>You have currently exceeded your allotted budget for this week!</h3>
+    {% endif %}
 	<form action = "/setbudget" class="m-3">
 		Set a new weekly budget? <input type = "text" name = "budget">
 		<button id = "setbudget">Set Budget!</button>
 		</form>
 	<br>
-	<form action = "/addentry" class="m-3"> 
+	<form action = "/addentry" class="m-3">
 		Expense Name: <input type = "text" name = "expense_name" required>
 		Description: <input type = "text" name = "expense_desc" required>
 		Amount: <input type = "number" name = "expense_amount" required min = "0" step = "0.01">
-	<button id = "addentry">Add Entry </button> 
+	<button id = "addentry">Add Entry </button>
 	</form>
 	{% for entry in table %}
 		<table class="m-3">
@@ -31,6 +34,8 @@
 			</tr>
 		</table>
 	{% endfor %}
+    <a href = "{{url_for('stockviewer')}}">Search Stocks</a>
+    <br>
 	<a href = "{{url_for('logout')}}">Logout</a>
 	</body>
 <script src="scripts.js"></script>

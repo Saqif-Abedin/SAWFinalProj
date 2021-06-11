@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>
+            Stock Viewer
+        </title>
+        <script src="{{ url_for('static', filename='js/d3.min.js') }}"></script>
+    </head>
+    <body>
+        <form id="stock-symbol-form">
+            Symbol: <input type="text" id="symbol" name="symbol">
+            <input type="submit" value="Search">
+        </form>
+        <div id="output">
+            <p id="stock-name"></p>
+            <p id="stock-price"></p>
+        </div>
+        <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+        <a href = "{{url_for('renderlogin')}}">Home</a>
+    </body>
+</html>

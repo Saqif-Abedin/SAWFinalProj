@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, url_for, redirect, abort
+from flask import Flask, render_template, request, session, url_for, redirect, abort, send_from_directory
 from flask_bcrypt import Bcrypt
 import bcrypt
 import os
@@ -52,7 +52,7 @@ def register():
     cursor.execute("select * from users where user_id = ?", (user_id,))
     user = cursor.fetchone()
     db.commit()
-    c.execute('select expense_name, desc, amount, timestamp from expenses where user_id=?', (user_id,)) 
+    c.execute('select expense_name, desc, amount, timestamp from expenses where user_id=?', (user_id,))
     expenses = c.fetchall()
     c.execute('select budget from users where user_id=?', (user_id,))
     budget = float(c.fetchone()[0])
@@ -87,7 +87,7 @@ def login():
     session["user_id"] = user[1]
     session["username"] = user[2]
     user_id = session["user_id"]
-    c.execute('select expense_name, desc, amount, timestamp from expenses where user_id=?', (user_id,)) 
+    c.execute('select expense_name, desc, amount, timestamp from expenses where user_id=?', (user_id,))
     expenses = c.fetchall()
     c.execute('select budget from users where user_id=?', (user_id,))
     budget = float(c.fetchone()[0])
@@ -114,14 +114,14 @@ def addentry():
     today = datetime.today().strftime('%Y-%m-%d-%H:%M')
     c.execute('insert into expenses(user_id, expense_name, desc, amount, timestamp) values(?,?,?,?,?)', (user_id, expense_name, expense_desc, '${:,.2f}'.format(expense_amount), today))
     db.commit()
-    c.execute('select expense_name, desc, amount, timestamp from expenses where user_id=?', (user_id,)) 
+    c.execute('select expense_name, desc, amount, timestamp from expenses where user_id=?', (user_id,))
     expenses = c.fetchall()
     session['expenses'] = expenses
     budget = session["budget"] - expense_amount
     session["budget"] = budget
     c.execute('update users set budget=?', (budget,))
     db.commit()
-    return render_template("main.html", table = expenses, budget = '${:,.2f}'.format(budget))
+    return render_template("main.html", table = expenses, budget = budget)
 
 @app.route("/setbudget")
 def setbudget():
@@ -131,9 +131,11 @@ def setbudget():
     session["budget"] = budget
     c.execute('delete from expenses where user_id=?', (user_id,))
     db.commit()
-    return render_template('main.html', budget = '${:,.2f}'.format(budget))
+    return render_template('main.html', budget = budget)
 
-
+@app.route("/stockviewer")
+def stockviewer():
+    return render_template('stock_viewer.html')
 
 
 if __name__ == "__main__":
