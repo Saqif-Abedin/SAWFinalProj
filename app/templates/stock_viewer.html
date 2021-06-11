@@ -11,7 +11,7 @@
     <body>
         {% include "header.html" %}
 
-
+        <a class="btn btn-secondary m-3" href = "{{url_for('renderlogin')}}">Home</a>
         <form id="stock-symbol-form" class="form-inline">
             <div class="form-group mx-sm-3 mb-2 col-sm-10">
                 Symbol: <input type="text" id="symbol" name="symbol" class="form-control" placeholder="e.g. MSFT">
@@ -24,6 +24,30 @@
             <p id="stock-price"></p>
         </div>
         <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-        <a class="btn btn-secondary m-3" href = "{{url_for('renderlogin')}}">Home</a>
-    </body>
-</html>
+
+        <div class="tradingview-widget-container">
+            <div id="tradingview_995f5"></div>
+            <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+            <script type="text/javascript">
+            new TradingView.widget(
+            {
+            "width": 980,
+            "height": 610,
+            "symbol": "GME",
+            "interval": "D",
+            "timezone": "Etc/UTC",
+            "theme": "light",
+            "style": "1",
+            "locale": "en",
+            "toolbar_bg": "#f1f3f6",
+            "enable_publishing": false,
+            "hide_legend": true,
+            "allow_symbol_change": true,
+            "container_id": "tradingview_995f5"
+        }
+            );
+            </script>
+        </div>
+
+            </body>
+        </html>
