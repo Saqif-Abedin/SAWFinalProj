@@ -62,12 +62,11 @@ def register():
     session["username"] = user[2]
     session['budget'] = budget
     session['expenses'] = expenses
-    return render_template("main.html", table = expenses, budget = budget)
+    return redirect(url_for('root'))
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-
     if request.method == "GET":
         if session.get("user_id"):
             return render_template("main.html", table = session['expenses'], budget = session['budget'])
@@ -93,8 +92,14 @@ def login():
     budget = float(c.fetchone()[0])
     session['budget'] = budget
     session['expenses'] = expenses
-    return render_template("main.html", table = expenses, budget = budget)
+    return redirect(url_for('root'))
 
+@app.route("/")
+def root(): 
+    if "username" in session:
+        return render_template("main.html", table = session['expenses'], budget = session['budget'])
+    else:
+        redirect(url_for('login'))
 
 @app.route("/logout")
 def logout():
@@ -103,10 +108,12 @@ def logout():
 
     session.pop("user_id")
     session.pop("username")
-    return render_template("login.html")
+    return redirect(url_for("login"))
 
 @app.route("/addentry")
 def addentry():
+    if not session.get("user_id") or not session.get("username"):
+        return redirect(url_for("login"))
     user_id = session["user_id"]
     expense_name = request.args.get("expense_name")
     expense_desc = request.args.get("expense_desc")
@@ -121,20 +128,24 @@ def addentry():
     session["budget"] = budget
     c.execute('update users set budget=?', (budget,))
     db.commit()
-    return render_template("main.html", table = expenses, budget = budget)
+    return redirect(url_for('root'))
 
 @app.route("/setbudget")
 def setbudget():
+    if not session.get("user_id") or not session.get("username"):
+        return redirect(url_for("login"))
     user_id = session["user_id"]
     budget = float(request.args.get("budget"))
     c.execute('update users set budget=? where user_id =? ', (budget, user_id))
     session["budget"] = budget
     c.execute('delete from expenses where user_id=?', (user_id,))
     db.commit()
-    return render_template('main.html', budget = budget)
+    return redirect(url_for('root'))
 
 @app.route("/stockviewer")
 def stockviewer():
+    if not session.get("user_id") or not session.get("username"):
+        return redirect(url_for("login"))
     return render_template('stock_viewer.html')
 
 

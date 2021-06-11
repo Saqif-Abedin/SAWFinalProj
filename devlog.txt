@@ -18,7 +18,7 @@ Set up login, register, and logout functions
 jonathanL -- 2021-06-01 09:00
 Set up login and signup templates
 
-saqifA -- 2021-06-02 04:05
+saqifA -- 2021-06-02 16:05
 added error template
 
 saqifA -- 2021-06-02 10:15
@@ -41,12 +41,11 @@ Current TODO:
 	-Add logout button on main.html
 	-Various other features?
 
-
 jonathanL -- 2021-06-07 09:24
 Reordered table columns to be more readable
 Added padding to elements
 
-saqifA -- 2021-06-06 9:51
+saqifA -- 2021-06-06 09:51
 updated README.md and updated Launch codes; ensured that they work properly
 
 alvinW -- 2021-06-07 09:55
@@ -56,3 +55,8 @@ various small changes
 Current TODO:
 	-Warn user when expense takes them over budget (in progress)
 	-Aesthetic changes (CSS, Bootstrap, Templating)
+
+jonathanL -- 2021-06-10 22:40
+made it correctly go to root instead of staying on login url
+fixed logout url, addentry url, and setbudget url as well
+added login redirects to everything
