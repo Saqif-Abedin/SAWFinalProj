@@ -8,8 +8,13 @@
 	{% include "header.html" %}
 	<h1 class="m-3"> Current Budget: ${{'%0.2f'| format(budget|float)}} </h1>
     {% if budget < 0 %}
-        <h3>You have currently exceeded your allotted budget for this week!</h3>
+        <h3>&nbsp; &nbsp; You have currently exceeded your allotted budget for this week!</h3>
     {% endif %}
+
+	{% if budget > 0 %}
+        <h3>&nbsp; &nbsp; Good Job! You are under budget for this week!</h3>
+    {% endif %}
+
 	<form action = "/setbudget" class="m-3">
 		Set a new weekly budget? <input type = "text" name = "budget">
 		<button id = "setbudget" class="btn btn-secondary m-3">Set Budget!</button>
@@ -24,14 +29,14 @@
 	{% for entry in table %}
 		<table class="m-3">
 			<tr>
-				<th>Timestamp:</th>
-					<td class = "c2">{{entry[3]}}</td>
-				<th>Amount:</th>
-					<td class = "c2">{{entry[2]}}</td>
 				<th>Expense Name:</th>
-					<td class = "c2">{{entry[0]}}</td>
+					<td class = "c2">{{entry[0]}} &nbsp;</td>
 				<th>Description:</th>
-					<td class = "c2">{{entry[1]}}</td>
+					<td class = "c2">{{entry[1]}} &nbsp;</td>
+				<th>Amount:</th>
+					<td class = "c2">{{entry[2]}} &nbsp;</td>
+				<th>Timestamp:</th>
+					<td class = "c2">{{entry[3]}} &nbsp;</td>
 			</tr>
 		</table>
 	{% endfor %}
