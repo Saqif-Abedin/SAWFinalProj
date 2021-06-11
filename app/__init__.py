@@ -22,7 +22,7 @@ def renderlogin():
     if session.get('user_id'):
         return render_template("main.html", table = session['expenses'], budget = session['budget'])
     else:
-        return render_template("login.html")
+        return redirect(url_for('login'))
 
 @app.route("/register", methods=["GET", "POST"])
 def register():

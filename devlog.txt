@@ -60,3 +60,6 @@ jonathanL -- 2021-06-10 22:40
 made it correctly go to root instead of staying on login url
 fixed logout url, addentry url, and setbudget url as well
 added login redirects to everything
+consistently styled all buttons and other elements
+added header
+styled error page as well

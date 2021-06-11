@@ -5,6 +5,7 @@
             integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
     </head>
     <body>
+        {% include "header.html" %}
         <h2 class="m-3">Register</h2>
         <form action="/register" method="POST">
             <div class="m-3">
@@ -20,8 +21,8 @@
                 <input type="text" class="form-control" id="budget" name="budget">
             </div>
 
-            <button type="submit" name="register" class="btn btn-primary m-3">Register</button> 
-            <a href="/login">Login</a>
+            <button type="submit" name="register" class="btn btn-secondary m-3">Register</button> 
+            <a href="/login" class="btn btn-outline-secondary">Login</a>
         </form>
     </body>
 </html>

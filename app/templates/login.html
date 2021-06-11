@@ -5,6 +5,7 @@
             integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
     </head>
     <body>
+        {% include "header.html" %}
         <h2 class="m-3">Login</h2>
         <form action="/login" method="POST">
             <div class="m-3">
@@ -16,8 +17,8 @@
                 <input type="password" class="form-control" id="password" name="password">
             </div>
 
-            <button type="submit" name="login" class="btn btn-primary m-3">Login</button> 
-            <a href="/register">Register</a>
+            <button type="submit" name="login" class="btn btn-secondary m-3">Login</button> 
+            <a href="/register" class="btn btn-outline-secondary">Register</a>
         </form>
     </body>
 </html>
